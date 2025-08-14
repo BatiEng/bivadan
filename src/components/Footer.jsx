@@ -29,7 +29,7 @@ const Footer = () => {
           {/* Navigation Links */}
           <div className="flex flex-col items-center md:items-start">
             <h3 className="text-lg font-semibold mb-4">Hızlı Linkler</h3>
-            <ul className="space-y-2 text-gray-300 text-sm">
+            <ul className="space-y-2 text-gray-300 text-sm text-center md:text-left">
               <li>
                 <a
                   href="/about"
@@ -60,18 +60,18 @@ const Footer = () => {
           {/* Contact Info and Social Media */}
           <div className="flex flex-col items-center md:items-start">
             <h3 className="text-lg font-semibold mb-4">Bizi Ulaşın</h3>
-            <ul className="space-y-3 text-gray-300 text-sm">
-              <li className="flex items-center gap-2">
+            <ul className="space-y-3 text-gray-300 text-sm text-center md:text-left">
+              <li className="flex items-center justify-center md:justify-start gap-2">
                 <Phone size={18} className="text-[#B259AF]" />
                 <span>0 553 469 7273</span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-center justify-center md:justify-start gap-2">
                 <Mail size={18} className="text-[#B259AF]" />
                 <span>info@bivadan.com.tr</span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-center justify-center md:justify-start gap-2">
                 <MapPin size={18} className="text-[#B259AF]" />
-                <span>
+                <span className="text-center md:text-left">
                   {" "}
                   Mansuroğlu Mahallesi İslam Kerimov Caddesi no:14
                   Bayraklı/İZMİR
