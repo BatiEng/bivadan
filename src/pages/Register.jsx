@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import logo from "../assets/biva-black.png";
@@ -49,16 +49,40 @@ const Register = () => {
     kvkk: false,
   });
   const [showModal, setShowModal] = useState(false);
+  const [isScrolledToBottom, setIsScrolledToBottom] = useState(false);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
   const [ok, setOk] = useState("");
+  const textRef = useRef(null);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    if (name === "kvkk" && type === "checkbox") {
+      setShowModal(true); // Open modal when trying to check KVKK
+      return;
+    }
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+  };
+
+  const handleScroll = () => {
+    if (textRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = textRef.current;
+      // Check if user has scrolled to the bottom (with a small buffer)
+      if (scrollTop + clientHeight >= scrollHeight - 10) {
+        setIsScrolledToBottom(true);
+      }
+    }
+  };
+
+  const handleKvkkConfirm = () => {
+    if (isScrolledToBottom) {
+      setFormData((prev) => ({ ...prev, kvkk: true }));
+      setShowModal(false);
+      setIsScrolledToBottom(false); // Reset for next time
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -71,7 +95,7 @@ const Register = () => {
       return;
     }
     if (!formData.kvkk) {
-      setErr("KVKK onayını vermeniz gerekiyor!");
+      setErr("KVKK metnini okuyup onaylamanız gerekiyor!");
       return;
     }
     if (!/^\d{11}$/.test(formData.tc)) {
@@ -333,8 +357,8 @@ const Register = () => {
                     name="kvkk"
                     checked={formData.kvkk}
                     onChange={handleChange}
-                    required
-                    className="h-4 w-4 text-gray-900 focus:ring-gray-900 border-gray-300 rounded"
+                    disabled
+                    className={`h-4 w-4 rounded border-2 focus:ring-[#B259AF] transition-colors ${"border-[#B259AF] bg-[#B259AF]"} `}
                   />
                   <label htmlFor="kvkk" className="ml-2 text-sm text-gray-600">
                     <span
@@ -382,19 +406,32 @@ const Register = () => {
       {/* KVKK Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-lg mx-4 max-h-[80vh] overflow-y-auto">
+          <div className="bg-white rounded-lg p-6 max-w-lg mx-4 max-h-[80vh] flex flex-col">
             <h3 className="text-xl font-bold text-gray-900 mb-4">
               KVKK Aydınlatma Metni
             </h3>
-            <pre className="text-sm text-gray-600 whitespace-pre-wrap">
-              {kvkkText}
-            </pre>
-            <button
-              onClick={() => setShowModal(false)}
-              className="mt-4 w-full bg-gray-900 text-white px-4 py-2 rounded-md font-medium text-sm hover:bg-gray-800 transition-colors"
+            <div
+              ref={textRef}
+              onScroll={handleScroll}
+              className="text-sm text-gray-600 whitespace-pre-wrap overflow-y-auto max-h-[60vh]"
             >
-              Kapat
-            </button>
+              {kvkkText}
+            </div>
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => setShowModal(false)}
+                className="flex-1 bg-gray-500 text-white px-4 py-2 rounded-md font-medium text-sm hover:bg-gray-600 transition-colors"
+              >
+                Kapat
+              </button>
+              <button
+                onClick={handleKvkkConfirm}
+                disabled={!isScrolledToBottom}
+                className="flex-1 bg-[#B259AF] text-white px-4 py-2 rounded-md font-medium text-sm hover:bg-[#A14A9E] transition-colors disabled:opacity-50"
+              >
+                Okudum, Onaylıyorum
+              </button>
+            </div>
           </div>
         </div>
       )}

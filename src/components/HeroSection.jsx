@@ -37,13 +37,13 @@ const HeroSection = () => {
     };
 
     fetchProjects();
-  }, []);
+  }, [backendURL]);
 
   useEffect(() => {
     if (slides.length === 0) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % slides.length);
+      setCurrentIndex((prev) => prev + 1);
     }, 3000);
 
     return () => clearInterval(interval);
@@ -59,11 +59,11 @@ const HeroSection = () => {
   }, []);
 
   const goToPrevious = () => {
-    setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
+    setCurrentIndex((prev) => prev - 1);
   };
 
   const goToNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % slides.length);
+    setCurrentIndex((prev) => prev + 1);
   };
 
   const getDotCount = () => {
@@ -72,9 +72,18 @@ const HeroSection = () => {
 
   const handleDotClick = (idx) => {
     if (isMobile) {
-      setCurrentIndex(idx);
+      setCurrentIndex(idx + slides.length);
     } else {
-      setCurrentIndex(idx * 4);
+      setCurrentIndex(idx * 4 + slides.length);
+    }
+  };
+
+  // Handle transition end to reset the index for seamless looping
+  const handleTransitionEnd = () => {
+    if (currentIndex >= slides.length * 2) {
+      setCurrentIndex(slides.length);
+    } else if (currentIndex < slides.length) {
+      setCurrentIndex(slides.length * 2 - 1);
     }
   };
 
@@ -102,15 +111,21 @@ const HeroSection = () => {
     );
   }
 
+  // Create an array with slides duplicated for seamless looping
+  const extendedSlides = [...slides, ...slides, ...slides];
+
   return (
     <section className="relative w-full h-[calc(100vh-100px)] overflow-hidden">
       <div
         className="h-full flex transition-transform duration-500 ease-in-out"
         style={{
-          transform: `translateX(-${currentIndex * 100}%)`,
+          transform: `translateX(-${
+            (currentIndex * 100) / (isMobile ? 1 : 4)
+          }%)`,
         }}
+        onTransitionEnd={handleTransitionEnd}
       >
-        {[...slides].map((item, idx) => (
+        {extendedSlides.map((item, idx) => (
           <Link
             key={idx}
             to={item.href}
@@ -159,7 +174,10 @@ const HeroSection = () => {
             key={idx}
             onClick={() => handleDotClick(idx)}
             className={`w-3 h-3 rounded-full transition-transform duration-300 ${
-              idx === (isMobile ? currentIndex : Math.floor(currentIndex / 4))
+              idx ===
+              (isMobile
+                ? currentIndex % slides.length
+                : Math.floor((currentIndex % slides.length) / 4))
                 ? "bg-[#222] scale-125"
                 : "bg-gray-400 hover:scale-110"
             }`}
