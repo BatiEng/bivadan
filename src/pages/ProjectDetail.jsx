@@ -1,4 +1,3 @@
-// src/pages/ProjectDetail.jsx
 import React, { useEffect, useState, useContext, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -6,7 +5,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProjectItem from "../components/ProjectItem";
 import { GlobalContext } from "../contexts/GlobalContext";
-import { FileText, Loader2 } from "lucide-react";
+import { FileText, Loader2, X } from "lucide-react";
 import { toast } from "react-toastify";
 
 const ProjectDetail = () => {
@@ -17,11 +16,10 @@ const ProjectDetail = () => {
   const [projectData, setProjectData] = useState(null);
   const [mainImage, setMainImage] = useState("");
   const [otherProjects, setOtherProjects] = useState([]);
-
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
+  const [enlargedImage, setEnlargedImage] = useState(null); // State for enlarged image modal
 
-  // participation
   const [partStatus, setPartStatus] = useState("none"); // none | pending | approved | rejected
   const [joining, setJoining] = useState(false);
   const user =
@@ -44,7 +42,7 @@ const ProjectDetail = () => {
         throw new Error(res.data?.message || "Proje bulunamadı.");
       }
 
-      const data = res.data.data; // { project, images, videos, files }
+      const data = res.data.data;
       setProjectData(data);
 
       const cover =
@@ -64,7 +62,6 @@ const ProjectDetail = () => {
       const res = await axios.get(`${backendURL}get_projects.php`, {
         params: { per_page: 6, sort: "created_at", order: "desc" },
       });
-      console.log(res);
       if (res.data?.success) {
         const list = (res.data.data || []).filter(
           (p) => Number(p.id) !== Number(id)
@@ -97,7 +94,6 @@ const ProjectDetail = () => {
     fetchProject();
     fetchOther();
     fetchParticipation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, backendURL]);
 
   const sendJoinRequest = async () => {
@@ -122,7 +118,6 @@ const ProjectDetail = () => {
         toast.error(resp.data?.message || "İstek gönderilemedi.");
       }
     } catch (e) {
-      console.log(e);
       toast.error(e?.response?.data?.message || e?.message || "Sunucu hatası.");
     } finally {
       setJoining(false);
@@ -133,6 +128,14 @@ const ProjectDetail = () => {
   const videos = useMemo(() => projectData?.videos || [], [projectData]);
   const files = useMemo(() => projectData?.files || [], [projectData]);
   const project = projectData?.project;
+
+  const openImageModal = (src) => {
+    setEnlargedImage(src);
+  };
+
+  const closeImageModal = () => {
+    setEnlargedImage(null);
+  };
 
   if (loading) {
     return (
@@ -162,7 +165,8 @@ const ProjectDetail = () => {
               <img
                 src={mainImage}
                 alt={project.title}
-                className="w-full h-[420px] object-cover"
+                className="w-full h-[420px] object-cover cursor-pointer"
+                onClick={() => openImageModal(mainImage)}
               />
             ) : (
               <div className="w-full h-[420px] flex items-center justify-center bg-gray-100 text-gray-400">
@@ -188,7 +192,10 @@ const ProjectDetail = () => {
                     key={img.id}
                     src={src}
                     alt={`${project.title} küçük görsel`}
-                    onClick={() => setMainImage(src)}
+                    onClick={() => {
+                      setMainImage(src);
+                      openImageModal(src);
+                    }}
                     className={`h-24 w-36 object-cover rounded-lg cursor-pointer border-2 transition-all duration-200 ${
                       active
                         ? "border-gray-600 shadow"
@@ -200,6 +207,26 @@ const ProjectDetail = () => {
             </div>
           )}
         </div>
+
+        {/* Image Modal */}
+        {enlargedImage && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+            <div className="relative max-w-[90vw] max-h-[90vh]">
+              <img
+                src={enlargedImage}
+                alt="Enlarged project image"
+                className="w-full h-full object-contain"
+              />
+              <button
+                onClick={closeImageModal}
+                className="absolute top-4 right-4 bg-white/80 hover:bg-white rounded-full p-2 shadow-lg transition"
+                aria-label="Görseli kapat"
+              >
+                <X size={24} className="text-[#222]" />
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Açıklama */}
         <div className="bg-white p-6 rounded-2xl shadow mb-8">
@@ -216,7 +243,6 @@ const ProjectDetail = () => {
               Katılımcı Alanı
             </h2>
 
-            {/* Right side CTA based on status */}
             {!user ? (
               <button
                 onClick={() => navigate("/uye-girisi")}
@@ -252,7 +278,6 @@ const ProjectDetail = () => {
                 </div>
               </div>
 
-              {/* Dosyalar */}
               {files.length > 0 && (
                 <div className="mt-6">
                   <h3 className="text-xl font-semibold text-gray-800 mb-3">
@@ -285,7 +310,7 @@ const ProjectDetail = () => {
           )}
         </div>
 
-        {/* Videolar (yüklü dosyalar) */}
+        {/* Videolar */}
         {videos.length > 0 && (
           <div className="bg-white p-6 rounded-2xl shadow mb-8">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
@@ -315,6 +340,7 @@ const ProjectDetail = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {otherProjects.map((p) => (
                 <ProjectItem
+                  key={p.id}
                   project={{
                     id: p.id,
                     title: p.title,
