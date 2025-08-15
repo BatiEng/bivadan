@@ -176,7 +176,7 @@ const ProfilePage = () => {
           order: "desc",
         },
       });
-      console.log(res);
+
       if (res.data?.success) {
         setRows(res.data.data || []);
         setTotalPages(res.data?.pagination?.total_pages || 1);

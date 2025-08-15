@@ -274,12 +274,7 @@ const AdminBivadanAlSat = () => {
                 >
                   Sahip
                 </th>
-                <th
-                  scope="col"
-                  className="hidden sm:table-cell px-3 py-2 text-left text-xs font-semibold uppercase tracking-wider text-gray-600"
-                >
-                  Rol
-                </th>
+
                 {headerCell("Şehir", "city", "hidden sm:table-cell")}
                 {headerCell("Tip", "layout_type", "hidden sm:table-cell")}
                 {headerCell("Yıl", "construction_year", "hidden sm:table-cell")}
@@ -360,19 +355,7 @@ const AdminBivadanAlSat = () => {
                         {r.owner_phone}
                       </div>
                     </td>
-                    <td className="hidden sm:table-cell px-3 py-2 text-sm">
-                      <Badge
-                        color={
-                          r.owner_role === "Admin"
-                            ? "blue"
-                            : r.owner_role === "Garson"
-                            ? "green"
-                            : "yellow"
-                        }
-                      >
-                        {r.owner_role || "—"}
-                      </Badge>
-                    </td>
+
                     <td className="hidden sm:table-cell px-3 py-2 text-sm text-gray-700">
                       {r.city || "—"}
                     </td>
@@ -394,7 +377,10 @@ const AdminBivadanAlSat = () => {
                     </td>
                     <td className="hidden sm:table-cell px-3 py-2 text-sm">
                       <button
-                        onClick={() => toggleActive(r.id, r.is_active)}
+                        onClick={() => {
+                          toggleActive(r.id, r.is_active);
+                          fetchData();
+                        }}
                         disabled={toggleLoading[r.id]}
                         className={`relative inline-flex items-center h-6 w-11 rounded-full transition-colors duration-200 ease-in-out ${
                           r.is_active === "1" ? "bg-green-500" : "bg-red-500"
@@ -461,6 +447,7 @@ const AdminBivadanAlSat = () => {
         </div>
         {selectedPropertyId && (
           <PropertyDetailsModal
+            is_show={true}
             propertyId={selectedPropertyId}
             onClose={() => setSelectedPropertyId(null)}
             backendURL={backendURL}

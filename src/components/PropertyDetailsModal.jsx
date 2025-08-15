@@ -50,7 +50,7 @@ const MediaLightbox = ({ mediaUrl, onClose, mediaType }) => {
   );
 };
 
-const PropertyDetailsModal = ({ propertyId, onClose, backendURL }) => {
+const PropertyDetailsModal = ({ propertyId, onClose, backendURL, is_show }) => {
   const [details, setDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState("");
@@ -165,10 +165,12 @@ const PropertyDetailsModal = ({ propertyId, onClose, backendURL }) => {
                     <p>
                       <strong>Yapım yılı:</strong> {details.construction_year}
                     </p>
-                    <p>
-                      <strong>Fiyat Aralığı:</strong> {details.min_price} -{" "}
-                      {details.max_price} {details.currency}
-                    </p>
+                    {is_show && (
+                      <p>
+                        <strong>Fiyat Aralığı:</strong> {details.min_price} -{" "}
+                        {details.max_price} {details.currency}
+                      </p>
+                    )}
                     <p>
                       <strong>Şehir:</strong> {details.city}
                     </p>

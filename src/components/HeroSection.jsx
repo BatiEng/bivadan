@@ -59,7 +59,9 @@ const HeroSection = () => {
   }, []);
 
   const goToPrevious = () => {
-    setCurrentIndex((prev) => prev - 1);
+    setCurrentIndex(
+      (prev) => (prev - 1 + slides.length * 3) % (slides.length * 3)
+    );
   };
 
   const goToNext = () => {
@@ -78,12 +80,9 @@ const HeroSection = () => {
     }
   };
 
-  // Handle transition end to reset the index for seamless looping
   const handleTransitionEnd = () => {
     if (currentIndex >= slides.length * 2) {
-      setCurrentIndex(slides.length);
-    } else if (currentIndex < slides.length) {
-      setCurrentIndex(slides.length * 2 - 1);
+      setCurrentIndex((currentIndex % slides.length) + slides.length);
     }
   };
 
@@ -111,7 +110,6 @@ const HeroSection = () => {
     );
   }
 
-  // Create an array with slides duplicated for seamless looping
   const extendedSlides = [...slides, ...slides, ...slides];
 
   return (

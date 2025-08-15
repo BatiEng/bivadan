@@ -63,7 +63,6 @@ const PropertyCard = ({ p, isAuth }) => {
           </div>
         </div>
 
-        <div className="mt-2 text-sm font-medium text-gray-800">{price}</div>
         <div className="text-xs text-gray-400">
           {p.layout_type} • {p.construction_year || "—"} •{" "}
           {new Date(p.created_at).toLocaleDateString()}
@@ -88,6 +87,7 @@ const PropertyCard = ({ p, isAuth }) => {
 
         {isModalOpen && isAuth && (
           <PropertyDetailsModal
+            is_show={false}
             propertyId={p.id}
             onClose={() => setIsModalOpen(false)}
             backendURL={backendURL}
@@ -136,15 +136,18 @@ const PropertiesPage = () => {
     try {
       setLoading(true);
       setError("");
-      const res = await axios.get(`${backendURL}get_all_properties.php`, {
-        params: {
-          page: p,
-          per_page: perPage,
-          sort: "created_at",
-          order: "desc",
-        },
-      });
-      console.log(res);
+      const res = await axios.get(
+        `${backendURL}get_all_properties_active.php`,
+        {
+          params: {
+            page: p,
+            per_page: perPage,
+            sort: "created_at",
+            order: "desc",
+          },
+        }
+      );
+
       if (res.data?.success) {
         setProperties(res.data.data || []);
         setTotalPages(res.data?.pagination?.total_pages || 1);

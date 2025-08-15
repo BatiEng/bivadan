@@ -208,14 +208,13 @@ const ProjectDetail = () => {
           )}
         </div>
 
-        {/* Image Modal */}
         {enlargedImage && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-            <div className="relative max-w-[90vw] max-h-[90vh]">
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 overflow-auto">
+            <div className="relative max-w-[80vw] my-4">
               <img
                 src={enlargedImage}
                 alt="Enlarged project image"
-                className="w-full h-full object-contain"
+                className="w-full object-contain"
               />
               <button
                 onClick={closeImageModal}
