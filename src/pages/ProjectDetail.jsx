@@ -81,6 +81,10 @@ const ProjectDetail = () => {
       });
       if (resp.data?.success) {
         setPartStatus(resp.data?.data?.status || "none");
+        setProjectData((prev) => ({
+          ...prev,
+          participationNote: resp.data?.data?.note || null,
+        }));
       } else {
         setPartStatus("none");
       }
@@ -257,6 +261,15 @@ const ProjectDetail = () => {
               <span className="text-sm px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">
                 Katılma isteğiniz onay bekliyor
               </span>
+            ) : partStatus === "rejected" ? (
+              <div className="text-sm px-3 py-1 rounded-lg bg-red-100 text-red-700">
+                Katılma isteğiniz reddedildi.
+                {projectData?.participationNote && (
+                  <p className="text-xs mt-1">
+                    Not: {projectData.participationNote}
+                  </p>
+                )}
+              </div>
             ) : (
               <button
                 disabled={joining}

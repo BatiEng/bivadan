@@ -66,6 +66,7 @@ const VerticalNavbar = () => {
   const [openKullanicilar, setOpenKullanicilar] = useState(false);
   const [openAlSat, setOpenAlSat] = useState(false);
   const [openProjeKatilim, setOpenProjeKatilim] = useState(false);
+  const [openHaberler, setOpenHaberler] = useState(false);
 
   useEffect(() => {
     setOpenProjeler(
@@ -239,6 +240,48 @@ const VerticalNavbar = () => {
                     to="/admin/proje-katilim/kullanicilar"
                     icon={LayoutList}
                     label="Kullanıcıları Listele"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Haberler */}
+          <div className="rounded-xl bg-white/5 p-1">
+            <button
+              onClick={() => setOpenHaberler((v) => !v)}
+              className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-gray-200 hover:bg-white/10 transition"
+              aria-expanded={openHaberler}
+            >
+              <LayoutList size={18} />
+              <span className="flex-1 text-left font-medium">Haberler</span>
+              <ChevronDown
+                size={16}
+                className={`transition-transform ${
+                  openHaberler ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            <div
+              className={`grid overflow-hidden transition-[grid-template-rows,opacity] duration-200 ease-out ${
+                openHaberler
+                  ? "grid-rows-[1fr] opacity-100"
+                  : "grid-rows-[0fr] opacity-0"
+              }`}
+            >
+              <div className="min-h-0">
+                <div className="mt-1 ml-2 flex flex-col gap-1 pb-1">
+                  <ItemLink
+                    to="/admin/haberler"
+                    icon={LayoutList}
+                    label="Listele"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  />
+                  <ItemLink
+                    to="/admin/haberler/ekle"
+                    icon={PlusCircle}
+                    label="Ekle"
                     onClick={() => setIsMobileMenuOpen(false)}
                   />
                 </div>

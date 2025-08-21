@@ -27,6 +27,8 @@ import AdminBivadanAlSat from "./pages/admin/AdminBivadanAlSat";
 import PropertiesPage from "./pages/PropertiesPage";
 import AdminProjectRequest from "./pages/admin/AdminProjectRequest";
 import AdminUsersProjects from "./pages/admin/AdminUsersProjects";
+import AdminAddNews from "./pages/admin/AdminAddNews";
+import AdminNewsList from "./pages/admin/AdminNewsList";
 
 function App() {
   const location = useLocation();
@@ -103,6 +105,22 @@ function App() {
           element={
             <AdminRoute>
               <AdminProjectRequest />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/haberler/ekle"
+          element={
+            <AdminRoute>
+              <AdminAddNews />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/haberler"
+          element={
+            <AdminRoute>
+              <AdminNewsList />
             </AdminRoute>
           }
         />

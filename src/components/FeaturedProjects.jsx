@@ -82,7 +82,7 @@ const FeaturedProjects = () => {
   }
 
   return (
-    <section className="bg-gradient-to-b from-gray-100 to-gray-200 py-16">
+    <section className=" py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl md:text-4xl font-extrabold text-center text-[#1a1a1a] mb-12 tracking-tight">
           Öne Çıkan Projelerimiz
