@@ -262,22 +262,33 @@ const ProjectDetail = () => {
                 Katılma isteğiniz onay bekliyor
               </span>
             ) : partStatus === "rejected" ? (
-              <div className="text-sm px-3 py-1 rounded-lg bg-red-100 text-red-700">
-                Katılma isteğiniz reddedildi.
-                {projectData?.participationNote && (
-                  <p className="text-xs mt-1">
-                    Not: {projectData.participationNote}
-                  </p>
-                )}
+              <div className="flex flex-col gap-5">
+                <div className="text-sm px-3 py-1 rounded-lg bg-red-100 text-red-700">
+                  Katılma isteğiniz reddedildi.
+                  {projectData?.participationNote && (
+                    <p className="text-xs mt-1">
+                      Not: {projectData.participationNote}
+                    </p>
+                  )}
+                </div>
+                <button
+                  disabled={joining}
+                  onClick={sendJoinRequest}
+                  className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-60"
+                >
+                  {joining ? "Gönderiliyor…" : "Katılma İsteği Gönder"}
+                </button>
               </div>
             ) : (
-              <button
-                disabled={joining}
-                onClick={sendJoinRequest}
-                className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-60"
-              >
-                {joining ? "Gönderiliyor…" : "Katılma İsteği Gönder"}
-              </button>
+              <>
+                <button
+                  disabled={joining}
+                  onClick={sendJoinRequest}
+                  className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-60"
+                >
+                  {joining ? "Gönderiliyor…" : "Katılma İsteği Gönder"}
+                </button>
+              </>
             )}
           </div>
 

@@ -11,9 +11,8 @@ function HomePage() {
       <NewsPopup />
       <Navbar />
       <HeroSection />
-
-      <FeaturedProjects />
       <NewsSection />
+      <FeaturedProjects />
     </div>
   );
 }
