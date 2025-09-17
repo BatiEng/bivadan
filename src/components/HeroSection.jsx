@@ -31,6 +31,7 @@ const HeroSection = () => {
         setSlides(fetchedSlides);
         setLoading(false);
       } catch (err) {
+        console.log(err);
         setError(err.message);
         setLoading(false);
       }

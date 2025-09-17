@@ -28,7 +28,7 @@ const ProjectItem = ({ project, disableLink = false }) => {
         <h3 className="text-xl font-bold text-[#1a1a1a] mb-3">
           {project.title}
         </h3>
-        <p className="text-gray-600 text-sm mb-5 leading-relaxed">
+        <p className="text-gray-600 text-sm mb-5 leading-relaxed line-clamp-1">
           {project.description}
         </p>
         {disableLink ? (

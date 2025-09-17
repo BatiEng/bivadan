@@ -360,15 +360,15 @@ const Register = () => {
                     disabled
                     className={`h-4 w-4 rounded border-2 focus:ring-[#B259AF] transition-colors ${"border-[#B259AF] bg-[#B259AF]"} `}
                   />
-                  <label htmlFor="kvkk" className="ml-2 text-sm text-gray-600">
-                    <span
-                      className="text-gray-900 underline cursor-pointer hover:text-gray-700"
-                      onClick={() => setShowModal(true)}
-                    >
+                  <a
+                    href="https://bivadan.com/files/kvkk.docx"
+                    className="ml-2 text-sm text-gray-600"
+                  >
+                    <span className="text-gray-900 underline cursor-pointer hover:text-gray-700">
                       KVKK
                     </span>{" "}
                     onaylıyorum.
-                  </label>
+                  </a>
                 </div>
 
                 {/* Alerts */}
