@@ -57,10 +57,10 @@ const Register = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (name === "kvkk" && type === "checkbox") {
-      setShowModal(true); // Open modal when trying to check KVKK
-      return;
-    }
+    // if (name === "kvkk" && type === "checkbox") {
+    //   setShowModal(true); // Open modal when trying to check KVKK
+    //   return;
+    // }
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -357,7 +357,6 @@ const Register = () => {
                     name="kvkk"
                     checked={formData.kvkk}
                     onChange={handleChange}
-                    disabled
                     className={`h-4 w-4 rounded border-2 focus:ring-[#B259AF] transition-colors ${"border-[#B259AF] bg-[#B259AF]"} `}
                   />
                   <a
